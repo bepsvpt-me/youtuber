@@ -25,15 +25,21 @@ Route::name('channel')->get('{channel}', function (string $cid) {
 Route::name('video')->get('{channel}/{video}', function (string $cid, string $vid) {
     $channel = Channel::query()->where('uid', '=', $cid)->firstOrFail();
 
+    /** @var Video $video */
+
     $video = Video::query()
         ->where('channel_id', '=', $channel->getKey())
         ->where('uid', '=', $vid)
         ->firstOrFail();
 
-    $statistics = $video->statistics->unique('views');
+    $statistics = $video->statistics()->get()->unique('views');
 
     if ($statistics->count() > 160) {
+        $last = $statistics->pop();
+
         $statistics = $statistics->nth(ceil($statistics->count() / 160));
+
+        $statistics->push($last);
     }
 
     return view('video', [
