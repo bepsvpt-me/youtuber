@@ -48,6 +48,7 @@
           <img
             alt="{{ $channel->name }}"
             height="35"
+            referrerpolicy="no-referrer"
             src="{{ $channel->thumbnail }}"
             style="margin-right: 6px;"
             width="35"
@@ -151,7 +152,16 @@
           <tbody>
             @foreach($videos as $idx => $video)
               <tr>
-                <td>{{ $idx + 1 }}</td>
+                <td>
+                  <img
+                    alt="{{ $idx + 1 }}"
+                    height="60"
+                    loading="lazy"
+                    referrerpolicy="no-referrer"
+                    src="https://i.ytimg.com/vi/{{ $video->uid }}/hqdefault.jpg"
+                    width="80"
+                  >
+                </td>
                 <td class="t-left"><a href="{{ route('video', ['channel' => $channel->uid, 'video' => $video->uid]) }}">{{ $video->name }}</a></td>
                 <td>{{ number_format($video->views) }}</td>
                 <td>{{ number_format($video->comments) }}</td>
@@ -214,7 +224,7 @@
 
       $('#videos').DataTable({
         columns: [
-          null,
+          { orderable: false },
           { orderable: false },
           null,
           null,

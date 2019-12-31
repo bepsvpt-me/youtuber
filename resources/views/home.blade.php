@@ -61,6 +61,7 @@
                     <img
                       alt="{{ $channel->name }}"
                       height="35"
+                      referrerpolicy="no-referrer"
                       src="{{ $channel->thumbnail }}"
                       style="vertical-align: bottom;"
                       width="35"
