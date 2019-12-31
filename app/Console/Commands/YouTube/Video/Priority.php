@@ -30,23 +30,20 @@ class Priority extends Command
     {
         $videos = Video::query()
             ->where('deleted', false)
+            ->where('priority', '>=', 100)
             ->orderByDesc('published_at')
-            ->get(['id', 'channel_id', 'name', 'views', 'priority', 'published_at']);
+            ->get(['id', 'views', 'comments', 'likes', 'dislikes', 'priority', 'published_at']);
 
         foreach ($videos as $video) {
-            if ($video->priority < 100) {
-                continue;
-            }
+            $priority = 100
+                + $video->published_at->timestamp
+                + $video->views
+                + $video->comments * 200
+                + $video->dislikes * 100
+                + $video->likes * 50
+                ;
 
-            if ($video->published_at->diffInWeeks() <= 1) {
-                $video->priority = 50000;
-            } else {
-                $video->priority = 100
-                    + max(15000 - $video->published_at->diffInDays() * 10, 0)
-                    + intval($video->views / 1000);
-            }
-
-            $video->save();
+            $video->update(compact('priority'));
         }
     }
 }
