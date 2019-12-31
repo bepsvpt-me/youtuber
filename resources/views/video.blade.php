@@ -18,6 +18,10 @@
       a {
         text-decoration: none;
       }
+
+      .graph {
+        height: 500px;
+      }
     </style>
   </head>
   <body>
@@ -42,67 +46,129 @@
         </svg>
       </a>
 
-      <div style="padding: 10px; overflow-x: scroll;">
-        <div style="width: 100%;">
-          <canvas height="500" style="width: {{ $statistics->count() * 7 }}px; min-width: 100%"></canvas>
+      <hr>
+
+      @foreach (['views', 'comments', 'likes'] as $type)
+        <div class="graph">
+          <canvas id="{{ $type }}"></canvas>
         </div>
-      </div>
+      @endforeach
     </div>
 
     <script>
-      new Chart(document.querySelector('canvas').getContext('2d'), {
+      const formatNum = (val) => val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+      const ticks = { callback: formatNum };
+
+      const options = {
+        maintainAspectRatio: false,
+        tooltips: {
+          mode: 'index',
+          intersect: false,
+          callbacks: {
+            label: function(tooltipItem, data) {
+              return `${data.datasets[tooltipItem.datasetIndex].label}: ${formatNum(tooltipItem.yLabel)}`;
+            },
+            afterLabel: function(tooltipItem, data) {
+              const idx = tooltipItem.index;
+              const values = data.datasets[tooltipItem.datasetIndex].data;
+
+              let inc = '不適用';
+              let time = '不適用';
+
+              if (idx > 0) {
+                inc = values[idx] - values[idx - 1];
+                inc = inc >= 0 ? `+${inc}` : inc;
+                time = Date.parse(data.labels[idx].replace(' ', 'T')) - Date.parse(data.labels[idx - 1].replace(' ', 'T'));
+                time = `${(time / 1000 / 60).toFixed(0)} 分鐘`;
+              }
+
+              return `增長數: ${inc}\n時間差: ${time}`;
+            }
+          },
+        },
+        scales: {
+          xAxes: [{
+            type: 'time',
+            distribution: 'linear',
+            time: {
+              displayFormats: {
+                minute: 'MM/DD HH:mm',
+              },
+              unit: 'minute',
+            },
+          }],
+          yAxes: [{ ticks }],
+        },
+      };
+
+      const style = {
+        backgroundColor: 'rgba(54, 162, 235, .2)',
+        borderColor: 'rgb(54, 162, 235)',
+        borderWidth: 2,
+        fill: false,
+        pointRadius: 0,
+      };
+
+      @if(app('router')->is('video'))
+        @php($statistics = $statistics->unique('views'))
+      @endif
+
+      const labels = @json($statistics->pluck('fetched_at')->map->setTimezone('Asia/Taipei')->map->toDateTimeString())
+
+      new Chart(document.querySelector('#views').getContext('2d'), {
         type: 'line',
         data: {
-          labels: @json($statistics->pluck('fetched_at')->map->setTimezone('Asia/Taipei')->map->toDateTimeString()),
+          labels,
           datasets: [{
             label: '觀看數',
             data: @json($statistics->pluck('views')),
-            backgroundColor: 'rgba(54, 162, 235, .2)',
-            borderColor: 'rgb(54, 162, 235)',
+            ...style,
           }],
         },
-        options: {
-          responsive: {{ app('router')->is('video.date') ? 'false' : 'true' }},
-          maintainAspectRatio: false,
-          hover: {
-            mode: 'nearest',
-            intersect: true,
-          },
-          tooltips: {
-            mode: 'index',
-            intersect: false,
-            callbacks: {
-              label: function(tooltipItem, data) {
-                const name = data.datasets[tooltipItem.datasetIndex].label;
-                const val = tooltipItem.yLabel.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-                return `${name}: ${val}`;
-              },
-              afterLabel: function(tooltipItem, data) {
-                const idx = tooltipItem.index;
-                const values = data.datasets[tooltipItem.datasetIndex].data;
+        options,
+      });
 
-                let inc = '不適用';
-                let time = '不適用';
-
-                if (idx > 0) {
-                  inc = values[idx] - values[idx - 1];
-                  inc = inc >= 0 ? `+${inc}` : inc;
-                  time = Date.parse(data.labels[idx].replace(' ', 'T')) - Date.parse(data.labels[idx - 1].replace(' ', 'T'));
-                  time = `${(time / 1000 / 60).toFixed(0)} 分鐘`;
-                }
-
-                return `增長數: ${inc}\n時間差: ${time}`;
-              }
-            },
-          },
-          scales: {
-            yAxes: [{
-              ticks: {
-                callback: (val) => val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-              },
-            }],
-          },
+      new Chart(document.querySelector('#comments').getContext('2d'), {
+        type: 'line',
+        data: {
+          labels,
+          datasets: [{
+            label: '留言數',
+            data: @json($statistics->pluck('comments')),
+            ...style,
+          }],
         },
+        options,
+      });
+
+      new Chart(document.querySelector('#likes').getContext('2d'), {
+        type: 'line',
+        data: {
+          labels,
+          datasets: [{
+            label: '喜歡數',
+            data: @json($statistics->pluck('likes')),
+            ...style,
+          }, {
+            label: '不喜歡數',
+            data: @json($statistics->pluck('dislikes')),
+            yAxisID: 'y-dislikes',
+            ...Object.assign(style, {
+              backgroundColor: 'rgba(235,97,26,0.2)',
+              borderColor: 'rgb(235,96,25)',
+            }),
+          }],
+        },
+        options: Object.assign(options, Object.assign(options.scales, Object.assign(options.scales.yAxes, {
+          yAxes: [{
+            ticks,
+          }, {
+            position: 'right',
+            id: 'y-dislikes',
+            ticks,
+          }],
+        }))),
       });
     </script>
   </body>

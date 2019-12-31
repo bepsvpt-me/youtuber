@@ -1,7 +1,6 @@
 <?php
 
 use App\Channel;
-use App\Video;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Route;
 
@@ -14,38 +13,22 @@ Route::name('home')->get('/', function () {
 });
 
 Route::name('channel')->get('{channel}', function (string $cid) {
-    $channel = Channel::query()->where('uid', '=', $cid)->firstOrFail();
-
     return view('channel', [
-        'channel' => $channel,
-        'videos' => $channel->videos()->orderByDesc('published_at')->get(),
+        'channel' => Channel::query()->where('uid', '=', $cid)->firstOrFail(),
     ]);
 });
 
 Route::name('video')->get('{channel}/{video}', function (string $cid, string $vid) {
     $channel = Channel::query()->where('uid', '=', $cid)->firstOrFail();
 
-    /** @var Video $video */
-
-    $video = Video::query()
-        ->where('channel_id', '=', $channel->getKey())
+    $video = $channel->videos()
         ->where('uid', '=', $vid)
         ->firstOrFail();
-
-    $statistics = $video->statistics()->get()->unique('views');
-
-    if ($statistics->count() > 160) {
-        $last = $statistics->pop();
-
-        $statistics = $statistics->nth(ceil($statistics->count() / 160));
-
-        $statistics->push($last);
-    }
 
     return view('video', [
         'channel' => $channel,
         'video' => $video,
-        'statistics' => $statistics,
+        'statistics' => $video->statistics,
     ]);
 });
 
@@ -58,15 +41,13 @@ Route::name('video.date')->get('{channel}/{video}/{date}', function (string $cid
 
     $channel = Channel::query()->where('uid', '=', $cid)->firstOrFail();
 
-    $video = Video::query()
-        ->where('channel_id', '=', $channel->getKey())
+    $video = $channel->videos()
         ->where('uid', '=', $vid)
         ->firstOrFail();
 
     $statistics = $video->statistics()
         ->whereBetween('fetched_at', [$day, $day->clone()->addDay()])
-        ->get()
-        ->unique('views');
+        ->get();
 
     return view('video', [
         'channel' => $channel,
