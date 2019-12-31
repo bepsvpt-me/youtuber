@@ -97,6 +97,9 @@
               },
               unit: 'minute',
             },
+            ticks: {
+              autoSkip: true,
+            },
           }],
           yAxes: [{ ticks }],
         },
