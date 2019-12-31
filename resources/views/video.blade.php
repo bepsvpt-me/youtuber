@@ -7,6 +7,8 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@0.7.4/dist/chartjs-plugin-zoom.min.js"></script>
     <style>
       html, body {
         background-color: #fff;
@@ -56,12 +58,32 @@
       @endforeach
     </div>
 
+    @if(app('router')->is('video'))
+      @php($statistics = $statistics->unique('views'))
+    @endif
+
     <script>
       const formatNum = (val) => val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+      const labels = @json($statistics->pluck('fetched_at')->map->setTimezone('Asia/Taipei')->map->toDateTimeString());
 
       const ticks = {
         callback: formatNum,
         precision: 0,
+      };
+
+      const zoom = {
+        enabled: true,
+        mode: 'x',
+        speed: 0.05,
+        rangeMin: {
+          x: labels.length ? Date.parse(labels[0]) : null,
+          y: null,
+        },
+        rangeMax: {
+          x: labels.length ? Date.parse(labels[labels.length - 1]) : null,
+          y: null,
+        },
       };
 
       const options = {
@@ -70,10 +92,10 @@
           mode: 'index',
           intersect: false,
           callbacks: {
-            label: function(tooltipItem, data) {
+            label: (tooltipItem, data) => {
               return `${data.datasets[tooltipItem.datasetIndex].label}: ${formatNum(tooltipItem.yLabel)}`;
             },
-            afterLabel: function(tooltipItem, data) {
+            afterLabel: (tooltipItem, data) => {
               const idx = tooltipItem.index;
               const values = data.datasets[tooltipItem.datasetIndex].data;
 
@@ -107,6 +129,12 @@
           }],
           yAxes: [{ ticks }],
         },
+        plugins: {
+          zoom: {
+            pan: zoom,
+            zoom: zoom,
+          },
+        },
       };
 
       const style = {
@@ -116,12 +144,6 @@
         fill: false,
         pointRadius: 0,
       };
-
-      @if(app('router')->is('video'))
-        @php($statistics = $statistics->unique('views'))
-      @endif
-
-      const labels = @json($statistics->pluck('fetched_at')->map->setTimezone('Asia/Taipei')->map->toDateTimeString());
 
       new Chart(document.querySelector('#views').getContext('2d'), {
         type: 'line',
