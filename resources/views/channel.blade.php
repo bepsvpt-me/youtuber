@@ -93,6 +93,14 @@
             </tr>
           @endforeach
 
+          <tr>
+            <td>所有平均</td>
+            <td>{{ number_format($videos->avg('views')) }}</td>
+            <td>{{ number_format($videos->avg('comments')) }}</td>
+            <td>{{ number_format($videos->avg('likes')) }}</td>
+            <td>{{ number_format($videos->avg('dislikes')) }}</td>
+          </tr>
+
           @foreach ([1, 2, 3] as $time)
             @php($temp = $videos->where('published_at', '>=', now()->subMonths($time)))
 
@@ -106,14 +114,6 @@
               <td>{{ number_format($temp->avg('dislikes')) }}</td>
             </tr>
           @endforeach
-
-          <tr>
-            <td>整體平均</td>
-            <td>{{ number_format($videos->avg('views')) }}</td>
-            <td>{{ number_format($videos->avg('comments')) }}</td>
-            <td>{{ number_format($videos->avg('likes')) }}</td>
-            <td>{{ number_format($videos->avg('dislikes')) }}</td>
-          </tr>
         </tbody>
       </table>
 
