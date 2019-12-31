@@ -62,6 +62,10 @@ class Import extends YouTube
                 $uid = $snippet->getResourceId()->getVideoId();
 
                 if (Video::query()->where('uid', '=', $uid)->exists()) {
+                    if (!empty($uids)) {
+                        $this->call('youtube:video:statistics', ['id' => $uids]);
+                    }
+
                     break 2;
                 }
 
