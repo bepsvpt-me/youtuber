@@ -81,9 +81,7 @@
 
         <tbody>
           @foreach ([5, 10, 20] as $num)
-            @if ($num > $videos->count())
-              @break
-            @endif
+            @break($num > $videos->count())
 
             @php($temp = $videos->take($num))
 
@@ -98,6 +96,8 @@
 
           @foreach ([1, 2, 3] as $time)
             @php($temp = $videos->where('published_at', '>=', now()->subMonths($time)))
+
+            @break($temp->isEmpty())
 
             <tr>
               <td>近 {{ $time }} 個月（{{ sprintf('%02d', $temp->count()) }} 部）</td>
