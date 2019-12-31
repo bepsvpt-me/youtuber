@@ -19,6 +19,7 @@ class Kernel extends ConsoleKernel
         Commands\YouTube\Channel\Add::class,
         Commands\YouTube\Channel\Statistics::class,
         Commands\YouTube\Playlist\Import::class,
+        Commands\YouTube\Video\Priority::class,
         Commands\YouTube\Video\Statistics::class,
     ];
 
@@ -39,6 +40,8 @@ class Kernel extends ConsoleKernel
         }
 
         $schedule->command('youtube:channel:statistics', $this->channels())->hourly();
+
+        $schedule->command('youtube:video:priority')->daily();
     }
 
     /**
@@ -64,6 +67,8 @@ class Kernel extends ConsoleKernel
     protected function videos(): array
     {
         return Video::query()
+            ->where('deleted', false)
+            ->orderByDesc('priority')
             ->orderByDesc('published_at')
             ->get()
             ->pluck('uid')
@@ -80,20 +85,14 @@ class Kernel extends ConsoleKernel
      */
     protected function intervals(): array
     {
-        $types = [
+        $intervals = [
             'everyMinute',
             'everyFiveMinutes',
             'everyTenMinutes',
             'everyFifteenMinutes',
-            'everyThirtyMinutes',
-            'hourly',
+            array_fill(0, 10, 'everyThirtyMinutes'),
+            array_fill(0, 30, 'hourly'),
         ];
-
-        $intervals = [];
-
-        foreach ($types as $key => $val) {
-            $intervals[] = array_fill(0, $key + 1, $val);
-        }
 
         return Arr::flatten($intervals);
     }
