@@ -27,6 +27,18 @@
       <a href="{{ route('channel', ['channel' => $channel->uid]) }}" style="margin-left: 1rem;">{{ $channel->name }}</a>
       <span style="margin: 0 4px;">•</span>
       <span>發佈於：{{ $video->published_at->setTimezone('Asia/Taipei') }}（{{ $video->published_at->diffForHumans() }}）</span>
+      <span style="margin: 0 4px;">•</span>
+      <a
+        href="https://www.youtube.com/watch?v={{ $video->uid }}"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <span>YouTube</span>
+
+        <svg style="fill: currentColor; width: 14px; height: 14px;" viewBox="0 0 24 24">
+          <path d="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z" />
+        </svg>
+      </a>
 
       <div style="padding: 10px; overflow-x: scroll;">
         <div style="width: 100%;">
