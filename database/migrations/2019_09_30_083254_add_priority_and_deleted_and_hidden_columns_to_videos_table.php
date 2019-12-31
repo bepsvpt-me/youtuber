@@ -14,7 +14,7 @@ class AddPriorityAndDeletedAndHiddenColumnsToVideosTable extends Migration
     public function up()
     {
         Schema::table('videos', function (Blueprint $table) {
-            $table->smallInteger('priority')->unsigned()->default(50000)->after('comments');
+            $table->integer('priority')->unsigned()->default(4294967294)->after('comments');
             $table->boolean('hidden')->default(false)->after('priority');
             $table->boolean('deleted')->default(false)->after('updated_at');
         });
