@@ -45,6 +45,8 @@ class Import extends YouTube
 
         $nextPageToken = '';
 
+        $repeated = false;
+
         while (true) {
             $playlist = $this->youtube
                 ->playlistItems
@@ -63,12 +65,18 @@ class Import extends YouTube
 
                 $uid = $snippet->getResourceId()->getVideoId();
 
-                if (Video::query()->where('uid', '=', $uid)->exists()) {
-                    if (!empty($uids)) {
-                        $this->call('youtube:video:statistics', ['id' => $uids]);
-                    }
+                $model = Video::query()->where('uid', '=', $uid)->first();
 
-                    break 2;
+                if (!is_null($model)) {
+                    $repeated = true;
+
+                    $model->update([
+                        'name' => $snippet->getTitle(),
+                        'description' => $snippet->getDescription(),
+                        'published_at' => Carbon::parse($snippet->getPublishedAt()),
+                    ]);
+
+                    continue;
                 }
 
                 $channel->videos()->create([
@@ -93,7 +101,7 @@ class Import extends YouTube
                 $this->call('youtube:video:statistics', ['id' => $uids]);
             }
 
-            if (is_null($nextPageToken = $playlist->getNextPageToken())) {
+            if ($repeated || is_null($nextPageToken = $playlist->getNextPageToken())) {
                 break;
             }
         }
