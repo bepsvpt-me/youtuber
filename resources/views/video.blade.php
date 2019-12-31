@@ -114,7 +114,7 @@
         @php($statistics = $statistics->unique('views'))
       @endif
 
-      const labels = @json($statistics->pluck('fetched_at')->map->setTimezone('Asia/Taipei')->map->toDateTimeString())
+      const labels = @json($statistics->pluck('fetched_at')->map->setTimezone('Asia/Taipei')->map->toDateTimeString());
 
       new Chart(document.querySelector('#views').getContext('2d'), {
         type: 'line',
