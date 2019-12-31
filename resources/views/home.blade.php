@@ -85,7 +85,7 @@
     <script>
       $('table').DataTable({
         columns: [
-          null,
+          { orderable: false },
           null,
           null,
           null,
