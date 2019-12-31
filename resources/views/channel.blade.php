@@ -70,7 +70,7 @@
         </thead>
 
         <tbody>
-          @foreach($videos as $idx => $video)
+          @foreach($channel->videos()->get() as $idx => $video)
             <tr>
               <td class="t-center">{{ $idx + 1 }}</td>
               <td><a href="{{ route('video', ['channel' => $channel->uid, 'video' => $video->uid]) }}">{{ $video->name }}</a></td>
