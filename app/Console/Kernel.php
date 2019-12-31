@@ -39,6 +39,12 @@ class Kernel extends ConsoleKernel
             $schedule->command('youtube:video:statistics', $videos)->{$intervals[$idx] ?? 'daily'}();
         }
 
+        foreach ($this->playlists() as $playlist) {
+            foreach (json_decode($playlist->crontab, true) as $cron) {
+                $schedule->command('youtube:playlist:import', ['--id' => $playlist->playlist])->{array_shift($cron)}(...$cron);
+            }
+        }
+
         $schedule->command('youtube:channel:statistics', $this->channels())->hourly();
 
         $schedule->command('youtube:video:priority')->daily();
@@ -57,6 +63,18 @@ class Kernel extends ConsoleKernel
             ->map->values()
             ->map->prepend('--')
             ->toArray();
+    }
+
+    /**
+     * Get playlist crontab.
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    protected function playlists()
+    {
+        return Channel::query()
+            ->whereNotNull('crontab')
+            ->get(['playlist', 'crontab']);
     }
 
     /**
