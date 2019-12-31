@@ -15,7 +15,7 @@ class Import extends YouTube
      *
      * @var string
      */
-    protected $signature = 'youtube:playlist:import {id : YouTube playlist id}';
+    protected $signature = 'youtube:playlist:import {--id= : YouTube playlist id}';
 
     /**
      * The console command description.
@@ -33,12 +33,14 @@ class Import extends YouTube
     {
         /** @var Channel|null $channel */
 
-        $channel = Channel::query()->where('playlist', '=', $this->argument('id'))->first();
+        $channels = Channel::all();
+
+        $channel = $channels->firstWhere('playlist', '=', $this->option('id'));
 
         if (is_null($channel)) {
-            $this->error('不存在的 playlist id');
+            $choice = $this->choice('請選擇頻道：', $channels->pluck('name')->toArray());
 
-            return;
+            $channel = $channels->firstWhere('name', '=', $choice);
         }
 
         $nextPageToken = '';
