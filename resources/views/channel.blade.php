@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ $channel->name }} | YouTuber</title>
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
+    <link href="https://cdn.datatables.net/w/dt/jq-3.3.1/dt-1.10.18/fh-3.1.4/r-2.2.2/datatables.min.css" rel="stylesheet" />
+    <script src="https://cdn.datatables.net/w/dt/jq-3.3.1/dt-1.10.18/fh-3.1.4/r-2.2.2/datatables.min.js"></script>
     <style>
       html, body {
         background-color: #fff;
@@ -51,7 +53,9 @@
         </svg>
       </a>
 
-      <table style="margin-top: 1rem;">
+      <hr style="margin: 1rem 0;" />
+
+      <table>
         <thead>
           <tr>
             <th class="t-center">#</th>
@@ -81,5 +85,24 @@
         </tbody>
       </table>
     </div>
+
+    <script>
+      $('table').DataTable({
+        columns: [
+          null,
+          { orderable: false },
+          null,
+          null,
+          null,
+          null,
+          { orderable: false },
+          { orderable: false },
+        ],
+        fixedHeader: true,
+        info: false,
+        order: [],
+        paging: false,
+      });
+    </script>
   </body>
 </html>
