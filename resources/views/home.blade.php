@@ -14,6 +14,10 @@
         margin: 0;
       }
 
+      a {
+        text-decoration: none;
+      }
+
       .th-info {
         width: 12%;
       }
@@ -45,12 +49,7 @@
           @foreach($channels as $idx => $channel)
             <tr>
               <td class="td-info">{{ $idx + 1 }}</td>
-              <td>
-                <a
-                  href="{{ route('channel', ['channel' => $channel->uid]) }}"
-                  style="text-decoration: none;"
-                >{{ $channel->name }}</a>
-              </td>
+              <td><a href="{{ route('channel', ['channel' => $channel->uid]) }}">{{ $channel->name }}</a></td>
               <td class="td-info">{{ number_format($channel->subscribers) }}</td>
               <td class="td-info">{{ number_format($channel->views) }}</td>
               <td class="td-info">{{ number_format($channel->videos) }}</td>

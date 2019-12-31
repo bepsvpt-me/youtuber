@@ -14,16 +14,17 @@
         height: 100%;
         margin: 0;
       }
+
+      a {
+        text-decoration: none;
+      }
     </style>
   </head>
   <body>
     <div style="padding: 1rem;">
       <h1 style="margin-bottom: 0;">{{ $video->name }}</h1>
 
-      <a
-        href="{{ route('channel', ['channel' => $channel->uid]) }}"
-        style="margin-left: 1rem; text-decoration: none;"
-      >{{ $channel->name }}</a>
+      <a href="{{ route('channel', ['channel' => $channel->uid]) }}" style="margin-left: 1rem;">{{ $channel->name }}</a>
       <span style="margin: 0 4px;">•</span>
       <span>發佈於：{{ $video->published_at->setTimezone('Asia/Taipei') }}（{{ $video->published_at->diffForHumans() }}）</span>
 

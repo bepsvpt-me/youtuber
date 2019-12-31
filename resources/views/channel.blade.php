@@ -14,6 +14,10 @@
         margin: 0;
       }
 
+      a {
+        text-decoration: none;
+      }
+
       .t-center {
         padding: 0 2px;
         text-align: center;
@@ -25,7 +29,7 @@
     <div style="padding: 1rem 3rem;">
       <h1 style="margin-bottom: 0;">{{ $channel->name }}</h1>
 
-      <a href="{{ route('home') }}" style="text-decoration: none;">回列表</a>
+      <a href="{{ route('home') }}">回列表</a>
       <span style="margin: 0 4px;">•</span>
       <span>訂閱數：{{ number_format($channel->subscribers) }}</span>
       <span style="margin: 0 4px;">•</span>
@@ -34,6 +38,18 @@
       <span>影片數：{{ number_format($channel->videos) }}</span>
       <span style="margin: 0 4px;">•</span>
       <span>創立於：{{ $channel->published_at->setTimezone('Asia/Taipei') }}</span>
+      <span style="margin: 0 4px;">•</span>
+      <a
+        href="https://www.youtube.com/channel/{{ $channel->uid }}"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <span>YouTube</span>
+
+        <svg style="fill: currentColor; width: 14px; height: 14px;" viewBox="0 0 24 24">
+          <path d="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z" />
+        </svg>
+      </a>
 
       <table style="margin-top: 1rem;">
         <thead>
@@ -53,12 +69,7 @@
           @foreach($videos as $idx => $video)
             <tr>
               <td class="t-center">{{ $idx + 1 }}</td>
-              <td>
-                <a
-                  href="{{ route('video', ['channel' => $channel->uid, 'video' => $video->uid]) }}"
-                  style="text-decoration: none;"
-                >{{ $video->name }}</a>
-              </td>
+              <td><a href="{{ route('video', ['channel' => $channel->uid, 'video' => $video->uid]) }}">{{ $video->name }}</a></td>
               <td class="t-center">{{ number_format($video->views) }}</td>
               <td class="t-center">{{ number_format($video->comments) }}</td>
               <td class="t-center">{{ number_format($video->likes) }}</td>
