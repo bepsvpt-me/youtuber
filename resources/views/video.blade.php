@@ -27,6 +27,8 @@
       <a href="{{ route('channel', ['channel' => $channel->uid]) }}" style="margin-left: 1rem;">{{ $channel->name }}</a>
       <span style="margin: 0 4px;">•</span>
       <span>發佈於：{{ $video->published_at->setTimezone('Asia/Taipei') }}（{{ $video->published_at->diffForHumans() }}）</span>
+      <span style="margin-right: 4px;">•</span>
+      <span>觀看數：{{ number_format($video->views) }}</span>
       <span style="margin: 0 4px;">•</span>
       <a
         href="https://www.youtube.com/watch?v={{ $video->uid }}"
