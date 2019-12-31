@@ -21,6 +21,7 @@ class Kernel extends ConsoleKernel
         Commands\YouTube\Playlist\Import::class,
         Commands\YouTube\Video\Priority::class,
         Commands\YouTube\Video\Statistics::class,
+        Commands\YouTube\Video\Trending::class,
     ];
 
     /**
@@ -44,6 +45,8 @@ class Kernel extends ConsoleKernel
                 $schedule->command('youtube:playlist:import', ['--id' => $playlist->playlist])->{array_shift($cron)}(...$cron);
             }
         }
+
+        $schedule->command('youtube:video:trending')->everyFifteenMinutes();
 
         $schedule->command('youtube:channel:statistics', $this->channels())->hourly();
 
