@@ -49,7 +49,7 @@ class Import extends YouTube
             $playlist = $this->youtube
                 ->playlistItems
                 ->listPlaylistItems('snippet', [
-                    'playlistId' => $this->argument('id'),
+                    'playlistId' => $channel->playlist,
                     'maxResults' => 50,
                     'pageToken' => $nextPageToken,
                 ]);
