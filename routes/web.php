@@ -8,7 +8,7 @@ Carbon::setLocale('zh_TW');
 
 Route::name('home')->get('/', function () {
     return view('home', [
-        'channels' => Channel::all(),
+        'channels' => Channel::query()->where('hidden', false)->get(),
     ]);
 });
 

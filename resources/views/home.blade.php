@@ -56,7 +56,19 @@
           <tbody>
             @foreach($channels as $idx => $channel)
               <tr>
-                <td>{{ $idx + 1 }}</td>
+                <td>
+                  @if ($channel->thumbnail)
+                    <img
+                      alt="{{ $channel->name }}"
+                      height="35"
+                      src="{{ $channel->thumbnail }}"
+                      style="vertical-align: bottom;"
+                      width="35"
+                    >
+                  @else
+                    <span>{{ $idx + 1 }}</span>
+                  @endif
+                </td>
                 <td class="t-left"><a href="{{ route('channel', ['channel' => $channel->uid]) }}">{{ $channel->name }}</a></td>
                 <td>{{ number_format($channel->subscribers) }}</td>
                 <td>{{ number_format($channel->views) }}</td>

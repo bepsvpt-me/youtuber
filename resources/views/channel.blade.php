@@ -43,7 +43,19 @@
   </head>
   <body>
     <div style="padding: 1rem 1.5rem;">
-      <h1 style="margin-bottom: 4px;">{{ $channel->name }}</h1>
+      <h1 style="margin-bottom: 4px; display: flex; align-items: center;">
+        @if ($channel->thumbnail)
+          <img
+            alt="{{ $channel->name }}"
+            height="35"
+            src="{{ $channel->thumbnail }}"
+            style="margin-right: 6px;"
+            width="35"
+          >
+        @endif
+
+        <span>{{ $channel->name }}</span>
+      </h1>
 
       <a href="{{ route('home') }}">回列表</a>
       <span style="margin: 0 4px;">•</span>
@@ -91,7 +103,7 @@
             @foreach ([5, 10, 20] as $num)
               @break($num > $videos->count())
 
-              @php($temp = $videos->take($num))
+              @php($temp = $videos->where('hidden', false)->take($num))
 
               <tr>
                 <td>近 {{ sprintf('%02d', $num) }} 部平均</td>
@@ -103,7 +115,7 @@
             @endforeach
 
             @foreach (range(1, 3) as $time)
-              @php($temp = $videos->where('published_at', '>=', now()->subMonths($time)))
+              @php($temp = $videos->where('hidden', false)->where('published_at', '>=', now()->subMonths($time)))
 
               @continue($temp->isEmpty())
 
@@ -155,7 +167,7 @@
     </div>
 
     <script>
-      @php($temp = $videos->take(54)->reverse())
+      @php($temp = $videos->where('hidden', false)->take(54)->reverse())
 
       const formatNum = (val) => val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 
