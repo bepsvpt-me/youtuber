@@ -81,7 +81,7 @@
 
       <hr style="margin: 1.2rem 0;" />
 
-      <h2 class="mb-0">影片觀看數走勢</h2>
+      <h2>影片觀看數走勢</h2>
 
       <div style="height: 300px;">
         <canvas></canvas>
@@ -185,6 +185,9 @@
           }],
         },
         options: {
+          legend: {
+            display: false,
+          },
           maintainAspectRatio: false,
           tooltips: {
             mode: 'index',
