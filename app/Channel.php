@@ -48,6 +48,7 @@ class Channel extends Model
      */
     public function videos(): HasMany
     {
-        return $this->hasMany(Video::class);
+        return $this->hasMany(Video::class)
+            ->orderByDesc('published_at');
     }
 }
