@@ -2,9 +2,10 @@
 
 use App\Channel;
 use App\Video;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Route;
 
-Carbon\Carbon::setLocale('zh_TW');
+Carbon::setLocale('zh_TW');
 
 Route::name('home')->get('/', function () {
     return view('home', [
@@ -29,9 +30,40 @@ Route::name('video')->get('{channel}/{video}', function (string $cid, string $vi
         ->where('uid', '=', $vid)
         ->firstOrFail();
 
+    $statistics = $video->statistics->unique('views');
+
+    if ($statistics->count() > 160) {
+        $statistics = $statistics->nth(ceil($statistics->count() / 160));
+    }
+
     return view('video', [
         'channel' => $channel,
         'video' => $video,
-        'statistics' => $video->statistics()->orderBy('fetched_at')->get()->unique('views'),
+        'statistics' => $statistics,
+    ]);
+});
+
+Route::name('video.date')->get('{channel}/{video}/{date}', function (string $cid, string $vid, string $date) {
+    try {
+        $day = Carbon::parse($date)->startOfDay()->subHours(8);
+    } catch (Exception $e) {
+        abort(404);
+    }
+
+    $channel = Channel::query()->where('uid', '=', $cid)->firstOrFail();
+
+    $video = Video::query()
+        ->where('channel_id', '=', $channel->getKey())
+        ->where('uid', '=', $vid)
+        ->firstOrFail();
+
+    $statistics = $video->statistics()
+        ->whereBetween('fetched_at', [$day, $day->clone()->addDay()])
+        ->get();
+
+    return view('video', [
+        'channel' => $channel,
+        'video' => $video,
+        'statistics' => $statistics,
     ]);
 });

@@ -44,7 +44,7 @@
 
       <div style="padding: 10px; overflow-x: scroll;">
         <div style="width: 100%;">
-          <canvas height="500" style="width: {{ $statistics->count() * 10 }}px; min-width: 100%"></canvas>
+          <canvas height="500" style="width: {{ $statistics->count() * 7 }}px; min-width: 100%"></canvas>
         </div>
       </div>
     </div>
@@ -62,7 +62,7 @@
           }],
         },
         options: {
-          responsive: false,
+          responsive: {{ app('router')->is('video.date') ? 'false' : 'true' }},
           maintainAspectRatio: false,
           hover: {
             mode: 'nearest',
