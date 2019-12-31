@@ -15,7 +15,7 @@ class AddThumbnailAndHiddenAndCrontabColumnsToChannelsTable extends Migration
     {
         Schema::table('channels', function (Blueprint $table) {
             $table->text('thumbnail')->nullable()->after('comments');
-            $table->text('crontab')->nullable()->index()->after('thumbnail');
+            $table->text('crontab')->nullable()->after('thumbnail');
             $table->boolean('hidden')->default(false)->index()->after('crontab');
         });
     }
