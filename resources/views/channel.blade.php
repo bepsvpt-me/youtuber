@@ -14,11 +14,8 @@
         margin: 0;
       }
 
-      .th-info {
-        width: 10%;
-      }
-
-      .td-info {
+      .t-center {
+        padding: 0 2px;
         text-align: center;
         white-space: nowrap;
       }
@@ -41,31 +38,33 @@
       <table style="margin-top: 1rem;">
         <thead>
           <tr>
-            <th>#</th>
+            <th class="t-center">#</th>
             <th>影片名稱</th>
-            <th class="th-info">觀看次數</th>
-            <th class="th-info">留言則數</th>
-            <th class="th-info">喜歡數</th>
-            <th class="th-info">不喜歡數</th>
-            <th class="th-info">發佈於</th>
+            <th class="t-center">觀看次數</th>
+            <th class="t-center">留言則數</th>
+            <th class="t-center">喜歡數</th>
+            <th class="t-center">不喜歡數</th>
+            <th class="t-center">發佈於</th>
+            <th class="t-center">更新於</th>
           </tr>
         </thead>
 
         <tbody>
           @foreach($videos as $idx => $video)
             <tr>
-              <td class="td-info">{{ $idx + 1 }}</td>
+              <td class="t-center">{{ $idx + 1 }}</td>
               <td>
                 <a
                   href="{{ route('video', ['channel' => $channel->uid, 'video' => $video->uid]) }}"
                   style="text-decoration: none;"
                 >{{ $video->name }}</a>
               </td>
-              <td class="td-info">{{ number_format($video->views) }}</td>
-              <td class="td-info">{{ number_format($video->comments) }}</td>
-              <td class="td-info">{{ number_format($video->likes) }}</td>
-              <td class="td-info">{{ number_format($video->dislikes) }}</td>
-              <td class="td-info" title="{{ $video->published_at->setTimezone('Asia/Taipei') }}">{{ $video->published_at->diffForHumans() }}</td>
+              <td class="t-center">{{ number_format($video->views) }}</td>
+              <td class="t-center">{{ number_format($video->comments) }}</td>
+              <td class="t-center">{{ number_format($video->likes) }}</td>
+              <td class="t-center">{{ number_format($video->dislikes) }}</td>
+              <td class="t-center" title="{{ $video->published_at->setTimezone('Asia/Taipei') }}">{{ $video->published_at->diffForHumans() }}</td>
+              <td class="t-center">{{ $video->updated_at->setTimezone('Asia/Taipei') }}</td>
             </tr>
           @endforeach
         </tbody>
