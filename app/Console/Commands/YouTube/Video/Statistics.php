@@ -50,10 +50,10 @@ class Statistics extends YouTube
             $statistics = $item->getStatistics();
 
             $fields = [
-                'views' => $statistics->getViewCount(),
-                'likes' => $statistics->getLikeCount(),
-                'dislikes' => $statistics->getDislikeCount(),
-                'favorites' => $statistics->getFavoriteCount(),
+                'views' => $statistics->getViewCount() ?: 0,
+                'likes' => $statistics->getLikeCount() ?: 0,
+                'dislikes' => $statistics->getDislikeCount() ?: 0,
+                'favorites' => $statistics->getFavoriteCount() ?: 0,
                 'comments' => $statistics->getCommentCount() ?: 0,
             ];
 
