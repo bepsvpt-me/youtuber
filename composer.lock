@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9f8a5115eb7d25a57d72d624673518cd",
+    "content-hash": "e557a63ff19260f8d7306d04bd057a7e",
     "packages": [
         {
             "name": "dnoegel/php-xdg-base-dir",
@@ -526,16 +526,16 @@
         },
         {
             "name": "google/auth",
-            "version": "v1.5.2",
+            "version": "v1.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/google-auth-library-php.git",
-                "reference": "2ee962e5df3e9427fda859f1b0515d6d62c4afa5"
+                "reference": "6d5455b4c0f4a58b1f1b4bdf2ba49221123698b3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/google-auth-library-php/zipball/2ee962e5df3e9427fda859f1b0515d6d62c4afa5",
-                "reference": "2ee962e5df3e9427fda859f1b0515d6d62c4afa5",
+                "url": "https://api.github.com/repos/googleapis/google-auth-library-php/zipball/6d5455b4c0f4a58b1f1b4bdf2ba49221123698b3",
+                "reference": "6d5455b4c0f4a58b1f1b4bdf2ba49221123698b3",
                 "shasum": ""
             },
             "require": {
@@ -554,7 +554,7 @@
                 "sebastian/comparator": ">=1.2.3"
             },
             "suggest": {
-                "phpseclib/phpseclib": "May be used in place of OpenSSL for signing strings. Please require version ^2."
+                "phpseclib/phpseclib": "May be used in place of OpenSSL for signing strings or for token management. Please require version ^2."
             },
             "type": "library",
             "autoload": {
@@ -573,7 +573,7 @@
                 "google",
                 "oauth2"
             ],
-            "time": "2019-07-22T21:01:31+00:00"
+            "time": "2019-10-01T18:35:05+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -3735,16 +3735,16 @@
         },
         {
             "name": "facade/ignition",
-            "version": "1.9.0",
+            "version": "1.9.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/facade/ignition.git",
-                "reference": "40461a1f680171876c186dfff419b2a4c892995c"
+                "reference": "ca7ab4f49230cb57c62fedddc5245f5496b82065"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/facade/ignition/zipball/40461a1f680171876c186dfff419b2a4c892995c",
-                "reference": "40461a1f680171876c186dfff419b2a4c892995c",
+                "url": "https://api.github.com/repos/facade/ignition/zipball/ca7ab4f49230cb57c62fedddc5245f5496b82065",
+                "reference": "ca7ab4f49230cb57c62fedddc5245f5496b82065",
                 "shasum": ""
             },
             "require": {
@@ -3802,7 +3802,7 @@
                 "laravel",
                 "page"
             ],
-            "time": "2019-09-27T16:49:08+00:00"
+            "time": "2019-10-01T17:44:44+00:00"
         },
         {
             "name": "facade/ignition-contracts",
@@ -5613,7 +5613,8 @@
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": "^7.2"
+        "php": "^7.2",
+        "ext-json": "*"
     },
     "platform-dev": []
 }
