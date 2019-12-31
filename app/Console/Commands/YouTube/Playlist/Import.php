@@ -54,6 +54,8 @@ class Import extends YouTube
 
             /** @var Google_Service_YouTube_PlaylistItem $video */
 
+            $uids = [];
+
             foreach ($playlist->getItems() as $video) {
                 $snippet = $video->getSnippet();
 
@@ -76,7 +78,13 @@ class Import extends YouTube
                     'updated_at' => $this->now,
                 ]);
 
+                $uids[] = $uid;
+
                 $this->info(sprintf('%s（%s）新增成功', $snippet->getTitle(), $uid));
+            }
+
+            if (!empty($uids)) {
+                $this->call('youtube:video:statistics', ['id' => $uids]);
             }
 
             if (is_null($nextPageToken = $playlist->getNextPageToken())) {
