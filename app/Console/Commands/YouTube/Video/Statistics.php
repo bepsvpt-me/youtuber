@@ -54,7 +54,7 @@ class Statistics extends YouTube
                 'likes' => $statistics->getLikeCount(),
                 'dislikes' => $statistics->getDislikeCount(),
                 'favorites' => $statistics->getFavoriteCount(),
-                'comments' => $statistics->getCommentCount(),
+                'comments' => $statistics->getCommentCount() ?: 0,
             ];
 
             /** @var Video $video */
