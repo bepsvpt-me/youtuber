@@ -14,7 +14,7 @@
     "google/apiclient": "^2.4",
     "htmlmin/htmlmin": "^6.0",
     "laravel/framework": "^6.0",
-    "laravel/tinker": "^1.0"
+    "laravel/tinker": "^2.0"
   },
   "require-dev": {
     "facade/ignition": "^1.4",
