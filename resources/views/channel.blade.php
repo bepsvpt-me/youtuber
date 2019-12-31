@@ -20,16 +20,29 @@
         text-decoration: none;
       }
 
-      .t-center {
-        padding: 0 2px;
+      table {
+        width: 100%;
         text-align: center;
         white-space: nowrap;
+      }
+
+      table.dataTable.no-footer {
+        border-bottom: 0;
+      }
+
+      .t-left {
+        text-align: left;
+        white-space: initial;
+      }
+
+      .mb-0 {
+        margin-bottom: 0;
       }
     </style>
   </head>
   <body>
     <div style="padding: 1rem 3rem;">
-      <h1 style="margin-bottom: 0;">{{ $channel->name }}</h1>
+      <h1 style="margin-bottom: 4px;">{{ $channel->name }}</h1>
 
       <a href="{{ route('home') }}">回列表</a>
       <span style="margin: 0 4px;">•</span>
@@ -53,33 +66,85 @@
         </svg>
       </a>
 
-      <hr style="margin: 1rem 0;" />
+      <hr style="margin: 1.2rem 0;" />
 
-      <table>
+      <h2 class="mb-0">統計</h2>
+
+      <table id="overview">
+        <thead>
+          <th>#</th>
+          <th>觀看次數</th>
+          <th>留言則數</th>
+          <th>喜歡數</th>
+          <th>不喜歡數</th>
+        </thead>
+
+        <tbody>
+          @foreach ([5, 10, 20] as $num)
+            @if ($num > $videos->count())
+              @break
+            @endif
+
+            @php($temp = $videos->take($num))
+
+            <tr>
+              <td>近 {{ sprintf('%02d', $num) }} 部</td>
+              <td>{{ number_format($temp->avg('views')) }}</td>
+              <td>{{ number_format($temp->avg('comments')) }}</td>
+              <td>{{ number_format($temp->avg('likes')) }}</td>
+              <td>{{ number_format($temp->avg('dislikes')) }}</td>
+            </tr>
+          @endforeach
+
+          @foreach ([1, 2, 3] as $time)
+            @php($temp = $videos->where('published_at', '>=', now()->subMonths($time)))
+
+            <tr>
+              <td>近 {{ $time }} 個月（{{ sprintf('%02d', $temp->count()) }} 部）</td>
+              <td>{{ number_format($temp->avg('views')) }}</td>
+              <td>{{ number_format($temp->avg('comments')) }}</td>
+              <td>{{ number_format($temp->avg('likes')) }}</td>
+              <td>{{ number_format($temp->avg('dislikes')) }}</td>
+            </tr>
+          @endforeach
+
+          <tr>
+            <td>整體平均</td>
+            <td>{{ number_format($videos->avg('views')) }}</td>
+            <td>{{ number_format($videos->avg('comments')) }}</td>
+            <td>{{ number_format($videos->avg('likes')) }}</td>
+            <td>{{ number_format($videos->avg('dislikes')) }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2 class="mb-0">影片</h2>
+
+      <table id="videos">
         <thead>
           <tr>
-            <th class="t-center">#</th>
-            <th>影片名稱</th>
-            <th class="t-center">觀看次數</th>
-            <th class="t-center">留言則數</th>
-            <th class="t-center">喜歡數</th>
-            <th class="t-center">不喜歡數</th>
-            <th class="t-center">發佈於</th>
-            <th class="t-center">更新於</th>
+            <th>#</th>
+            <th class="t-left">影片名稱</th>
+            <th>觀看次數</th>
+            <th>留言則數</th>
+            <th>喜歡數</th>
+            <th>不喜歡數</th>
+            <th>發佈於</th>
+            <th>更新於</th>
           </tr>
         </thead>
 
         <tbody>
-          @foreach($channel->videos()->get() as $idx => $video)
+          @foreach($videos as $idx => $video)
             <tr>
-              <td class="t-center">{{ $idx + 1 }}</td>
-              <td><a href="{{ route('video', ['channel' => $channel->uid, 'video' => $video->uid]) }}">{{ $video->name }}</a></td>
-              <td class="t-center">{{ number_format($video->views) }}</td>
-              <td class="t-center">{{ number_format($video->comments) }}</td>
-              <td class="t-center">{{ number_format($video->likes) }}</td>
-              <td class="t-center">{{ number_format($video->dislikes) }}</td>
-              <td class="t-center" title="{{ $video->published_at->setTimezone('Asia/Taipei') }}">{{ $video->published_at->diffForHumans() }}</td>
-              <td class="t-center">{{ $video->updated_at->setTimezone('Asia/Taipei') }}</td>
+              <td>{{ $idx + 1 }}</td>
+              <td class="t-left"><a href="{{ route('video', ['channel' => $channel->uid, 'video' => $video->uid]) }}">{{ $video->name }}</a></td>
+              <td>{{ number_format($video->views) }}</td>
+              <td>{{ number_format($video->comments) }}</td>
+              <td>{{ number_format($video->likes) }}</td>
+              <td>{{ number_format($video->dislikes) }}</td>
+              <td title="{{ $video->published_at->setTimezone('Asia/Taipei') }}">{{ $video->published_at->diffForHumans() }}</td>
+              <td>{{ $video->updated_at->setTimezone('Asia/Taipei') }}</td>
             </tr>
           @endforeach
         </tbody>
@@ -87,7 +152,14 @@
     </div>
 
     <script>
-      $('table').DataTable({
+      $('#overview').DataTable({
+        info: false,
+        ordering: false,
+        paging: false,
+        searching: false,
+      });
+
+      $('#videos').DataTable({
         columns: [
           null,
           { orderable: false },

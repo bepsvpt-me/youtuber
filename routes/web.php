@@ -13,8 +13,11 @@ Route::name('home')->get('/', function () {
 });
 
 Route::name('channel')->get('{channel}', function (string $cid) {
+    $channel = Channel::query()->where('uid', '=', $cid)->firstOrFail();
+
     return view('channel', [
-        'channel' => Channel::query()->where('uid', '=', $cid)->firstOrFail(),
+        'channel' => $channel,
+        'videos' => $channel->videos()->get(),
     ]);
 });
 
