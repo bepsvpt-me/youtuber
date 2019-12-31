@@ -6,7 +6,9 @@
     <title>{{ $channel->name }} | YouTuber</title>
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
     <link href="https://cdn.datatables.net/w/dt/jq-3.3.1/dt-1.10.18/fh-3.1.4/r-2.2.2/datatables.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.css" rel="stylesheet">
     <script src="https://cdn.datatables.net/w/dt/jq-3.3.1/dt-1.10.18/fh-3.1.4/r-2.2.2/datatables.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script>
     <style>
       html, body {
         background-color: #fff;
@@ -67,7 +69,13 @@
 
       <hr style="margin: 1.2rem 0;" />
 
-      <h2 class="mb-0">統計</h2>
+      <h2 class="mb-0">近期觀看數走勢</h2>
+
+      <div style="height: 300px;">
+        <canvas></canvas>
+      </div>
+
+      <h2 class="mb-0">數據統計</h2>
 
       <div style="overflow-x: auto;">
         <table id="overview">
@@ -94,15 +102,7 @@
               </tr>
             @endforeach
 
-            <tr>
-              <td>所有平均</td>
-              <td>{{ number_format($videos->avg('views')) }}</td>
-              <td>{{ number_format($videos->avg('comments')) }}</td>
-              <td>{{ number_format($videos->avg('likes')) }}</td>
-              <td>{{ number_format($videos->avg('dislikes')) }}</td>
-            </tr>
-
-            @foreach ([1, 2, 3] as $time)
+            @foreach (range(1, 3) as $time)
               @php($temp = $videos->where('published_at', '>=', now()->subMonths($time)))
 
               @continue($temp->isEmpty())
@@ -119,7 +119,7 @@
         </table>
       </div>
 
-      <h2 class="mb-0">影片</h2>
+      <h2 class="mb-0">影片列表</h2>
 
       <div style="overflow-x: auto;">
         <table id="videos">
@@ -155,6 +155,41 @@
     </div>
 
     <script>
+      @php($temp = $videos->take(54)->reverse())
+
+      const formatNum = (val) => val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+      new Chart(document.querySelector('canvas').getContext('2d'), {
+        type: 'line',
+        data: {
+          labels: @json($temp->pluck('name')),
+          datasets: [{
+            label: '觀看數',
+            data: @json($temp->pluck('views')),
+            backgroundColor: 'rgba(54, 162, 235, .2)',
+            borderColor: 'rgb(54, 162, 235)',
+            borderWidth: 2,
+            fill: false,
+          }],
+        },
+        options: {
+          maintainAspectRatio: false,
+          tooltips: {
+            mode: 'index',
+            intersect: false,
+            callbacks: {
+              label: (tooltipItem, data) => `${data.datasets[tooltipItem.datasetIndex].label}: ${formatNum(tooltipItem.yLabel)}`,
+            }
+          },
+          scales:{
+            xAxes: [{
+              display: false,
+            }],
+            yAxes: [{ ticks: { callback: formatNum } }],
+          },
+        },
+      });
+
       $('#overview').DataTable({
         info: false,
         ordering: false,
