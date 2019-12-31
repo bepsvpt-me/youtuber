@@ -21,7 +21,6 @@
       }
 
       table {
-        width: 100%;
         text-align: center;
         white-space: nowrap;
       }

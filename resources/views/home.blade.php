@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>YouTuber</title>
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
+    <link href="https://cdn.datatables.net/w/dt/jq-3.3.1/dt-1.10.18/fh-3.1.4/r-2.2.2/datatables.min.css" rel="stylesheet" />
+    <script src="https://cdn.datatables.net/w/dt/jq-3.3.1/dt-1.10.18/fh-3.1.4/r-2.2.2/datatables.min.js"></script>
     <style>
       html, body {
         background-color: #fff;
@@ -18,13 +20,18 @@
         text-decoration: none;
       }
 
-      .th-info {
-        width: 12%;
-      }
-
-      .td-info {
+      table {
         text-align: center;
         white-space: nowrap;
+      }
+
+      table.dataTable.no-footer {
+        border-bottom: 0;
+      }
+
+      .t-left {
+        text-align: left;
+        white-space: initial;
       }
     </style>
   </head>
@@ -37,28 +44,45 @@
           <tr>
             <th>#</th>
             <th>頻道名稱</th>
-            <th class="th-info">訂閱數</th>
-            <th class="th-info">觀看次數</th>
-            <th class="th-info">影片數</th>
-            <th class="th-info">創立於</th>
-            <th class="th-info">更新於</th>
+            <th>訂閱數</th>
+            <th>觀看次數</th>
+            <th>影片數</th>
+            <th>創立於</th>
+            <th>更新於</th>
           </tr>
         </thead>
 
         <tbody>
           @foreach($channels as $idx => $channel)
             <tr>
-              <td class="td-info">{{ $idx + 1 }}</td>
-              <td><a href="{{ route('channel', ['channel' => $channel->uid]) }}">{{ $channel->name }}</a></td>
-              <td class="td-info">{{ number_format($channel->subscribers) }}</td>
-              <td class="td-info">{{ number_format($channel->views) }}</td>
-              <td class="td-info">{{ number_format($channel->videos) }}</td>
-              <td class="td-info">{{ $channel->published_at->setTimezone('Asia/Taipei') }}</td>
-              <td class="td-info">{{ $channel->updated_at->setTimezone('Asia/Taipei') }}</td>
+              <td>{{ $idx + 1 }}</td>
+              <td class="t-left"><a href="{{ route('channel', ['channel' => $channel->uid]) }}">{{ $channel->name }}</a></td>
+              <td>{{ number_format($channel->subscribers) }}</td>
+              <td>{{ number_format($channel->views) }}</td>
+              <td>{{ number_format($channel->videos) }}</td>
+              <td>{{ $channel->published_at->setTimezone('Asia/Taipei') }}</td>
+              <td>{{ $channel->updated_at->setTimezone('Asia/Taipei') }}</td>
             </tr>
           @endforeach
         </tbody>
       </table>
     </div>
+
+    <script>
+      $('table').DataTable({
+        columns: [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          { orderable: false },
+        ],
+        info: false,
+        order: [],
+        paging: false,
+      });
+    </script>
   </body>
 </html>
