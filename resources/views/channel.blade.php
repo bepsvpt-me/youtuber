@@ -105,7 +105,7 @@
             @foreach ([1, 2, 3] as $time)
               @php($temp = $videos->where('published_at', '>=', now()->subMonths($time)))
 
-              @break($temp->isEmpty())
+              @continue($temp->isEmpty())
 
               <tr>
                 <td>近 {{ $time }} 個月平均（{{ sprintf('%02d', $temp->count()) }} 部）</td>
