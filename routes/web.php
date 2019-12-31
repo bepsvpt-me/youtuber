@@ -59,7 +59,8 @@ Route::name('video.date')->get('{channel}/{video}/{date}', function (string $cid
 
     $statistics = $video->statistics()
         ->whereBetween('fetched_at', [$day, $day->clone()->addDay()])
-        ->get();
+        ->get()
+        ->unique('views');
 
     return view('video', [
         'channel' => $channel,
