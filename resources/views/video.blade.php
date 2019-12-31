@@ -58,7 +58,10 @@
     <script>
       const formatNum = (val) => val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 
-      const ticks = { callback: formatNum };
+      const ticks = {
+        callback: formatNum,
+        precision: 0,
+      };
 
       const options = {
         maintainAspectRatio: false,
