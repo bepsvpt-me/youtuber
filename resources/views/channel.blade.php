@@ -111,7 +111,7 @@
         <tbody>
           @foreach($videos as $idx => $video)
             <tr>
-              <td>
+              <td class="t-center">
                 @component('components.image')
                   @slot('alt', $idx + 1)
                   @slot('height', 60)
