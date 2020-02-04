@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use ErrorException;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -101,7 +102,11 @@ class SafeBrowseController extends Controller
      */
     protected function fetch(string $url, string $path): bool
     {
-        $content = file_get_contents($url);
+        try {
+            $content = file_get_contents($url);
+        } catch (ErrorException $e) {
+            abort(404);
+        }
 
         abort_unless($content, 404);
 
