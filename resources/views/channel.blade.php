@@ -1,179 +1,137 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="zh-Hant">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ $channel->name }} | YouTuber</title>
-    <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
-    <link href="https://cdn.datatables.net/w/dt/jq-3.3.1/dt-1.10.18/fh-3.1.4/r-2.2.2/datatables.min.css" rel="stylesheet" />
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.css" rel="stylesheet">
-    <script src="https://cdn.datatables.net/w/dt/jq-3.3.1/dt-1.10.18/fh-3.1.4/r-2.2.2/datatables.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script>
-    <style>
-      html, body {
-        background-color: #fff;
-        color: #636b6f;
-        font-family: 'Nunito', sans-serif;
-        height: 100%;
-        margin: 0;
-      }
-
-      a {
-        text-decoration: none;
-      }
-
-      table {
-        text-align: center;
-        white-space: nowrap;
-      }
-
-      table.dataTable.no-footer {
-        border-bottom: 0;
-      }
-
-      .t-left {
-        text-align: left;
-        white-space: initial;
-      }
-
-      .mb-0 {
-        margin-bottom: 0;
-      }
-    </style>
+    <link href="{{ asset('/css/app.css')  }}" rel="stylesheet">
+    <link href="{{ asset('/css/chart.min.css')  }}" rel="stylesheet">
+    <script src="{{ asset('/js/chart.min.js') }}"></script>
   </head>
   <body>
-    <div style="padding: 1rem 1.5rem;">
-      <h1 style="margin-bottom: 4px; display: flex; align-items: center;">
-        @if ($channel->thumbnail)
-          <img
-            alt="{{ $channel->name }}"
-            height="35"
-            referrerpolicy="no-referrer"
-            src="{{ $channel->thumbnail }}"
-            style="margin-right: 6px;"
-            width="35"
-          >
-        @endif
+    <h1 style="display: flex; align-items: center;">
+      @if ($channel->thumbnail)
+        @component('components.image')
+          @slot('alt', $channel->name)
+          @slot('src', route('ggpht', ['payload' => bin2hex(app('aes')->encrypt($channel->thumbnail))]))
+          @slot('style', 'margin-right: 6px;')
+        @endcomponent
+      @endif
 
-        <span>{{ $channel->name }}</span>
-      </h1>
+      <span>{{ $channel->name }}</span>
+    </h1>
 
-      <a href="{{ route('home') }}">回列表</a>
-      <span style="margin: 0 4px;">•</span>
-      <span>訂閱數：{{ number_format($channel->subscribers) }}</span>
-      <span style="margin: 0 4px;">•</span>
-      <span>觀看數：{{ number_format($channel->views) }}</span>
-      <span style="margin: 0 4px;">•</span>
-      <span>影片數：{{ number_format($channel->videos) }}</span>
-      <span style="margin: 0 4px;">•</span>
-      <span>創立於：{{ $channel->published_at->setTimezone('Asia/Taipei') }}</span>
-      <span style="margin: 0 4px;">•</span>
-      <a
-        href="https://www.youtube.com/channel/{{ $channel->uid }}"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <span>YouTube</span>
+    <a href="{{ route('home') }}">回列表</a>
+    @include('components.dot')
+    <span>訂閱數：{{ number_format($channel->subscribers) }}</span>
+    @include('components.dot')
+    <span>觀看數：{{ number_format($channel->views) }}</span>
+    @include('components.dot')
+    <span>影片數：{{ number_format($channel->videos) }}</span>
+    @include('components.dot')
+    <span>創立於：{{ $channel->published_at->setTimezone('Asia/Taipei') }}</span>
+    @include('components.dot')
+    @component('components.external-link')
+      @slot('href', sprintf('https://www.youtube.com/channel/%s', $channel->uid))
 
-        <svg style="fill: currentColor; width: 14px; height: 14px;" viewBox="0 0 24 24">
-          <path d="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z" />
-        </svg>
-      </a>
+      YouTube
+    @endcomponent
 
-      <hr style="margin: 1.2rem 0;" />
+    <hr class="mt-1 mb-1" />
 
-      <h2>影片觀看數走勢</h2>
+    <h2>影片觀看數走勢</h2>
 
-      <div style="height: 300px;">
-        <canvas></canvas>
-      </div>
+    <div class="mt-1" style="height: 300px;">
+      <canvas></canvas>
+    </div>
 
-      <h2 class="mb-0">數據統計</h2>
+    <h2 class="mt-1">數據統計</h2>
 
-      <div style="overflow-x: auto;">
-        <table id="overview">
-          <thead>
+    <div class="x-scroll">
+      <table>
+        <thead>
+          <tr>
             <th>#</th>
             <th>觀看次數</th>
             <th>留言則數</th>
             <th>喜歡數</th>
             <th>不喜歡數</th>
-          </thead>
+          </tr>
+        </thead>
 
-          <tbody>
-            @foreach ([5, 10, 20] as $num)
-              @break($num > $videos->count())
+        <tbody>
+          @foreach ([5, 10, 20] as $num)
+            @break($num > $videos->count())
 
-              @php($temp = $videos->where('hidden', false)->take($num))
+            @php($temp = $videos->where('hidden', false)->take($num))
 
-              <tr>
-                <td>近 {{ sprintf('%02d', $num) }} 部平均</td>
-                <td>{{ number_format($temp->avg('views')) }}</td>
-                <td>{{ number_format($temp->avg('comments')) }}</td>
-                <td>{{ number_format($temp->avg('likes')) }}</td>
-                <td>{{ number_format($temp->avg('dislikes')) }}</td>
-              </tr>
-            @endforeach
-
-            @foreach (range(1, 3) as $time)
-              @php($temp = $videos->where('hidden', false)->where('published_at', '>=', now()->subMonths($time)))
-
-              @continue($temp->isEmpty())
-
-              <tr>
-                <td>近 {{ $time }} 個月平均（{{ sprintf('%02d', $temp->count()) }} 部）</td>
-                <td>{{ number_format($temp->avg('views')) }}</td>
-                <td>{{ number_format($temp->avg('comments')) }}</td>
-                <td>{{ number_format($temp->avg('likes')) }}</td>
-                <td>{{ number_format($temp->avg('dislikes')) }}</td>
-              </tr>
-            @endforeach
-          </tbody>
-        </table>
-      </div>
-
-      <h2 class="mb-0">影片列表</h2>
-
-      <div style="overflow-x: auto;">
-        <table id="videos">
-          <thead>
             <tr>
-              <th>#</th>
-              <th class="t-left">影片名稱</th>
-              <th>觀看次數</th>
-              <th>留言則數</th>
-              <th>喜歡數</th>
-              <th>不喜歡數</th>
-              <th>發佈於</th>
-              <th>更新於</th>
+              <td class="t-center">近 {{ sprintf('%02d', $num) }} 部平均</td>
+              <td class="t-right">{{ number_format($temp->avg('views')) }}</td>
+              <td class="t-right">{{ number_format($temp->avg('comments')) }}</td>
+              <td class="t-right">{{ number_format($temp->avg('likes')) }}</td>
+              <td class="t-right">{{ number_format($temp->avg('dislikes')) }}</td>
             </tr>
-          </thead>
+          @endforeach
 
-          <tbody>
-            @foreach($videos as $idx => $video)
-              <tr>
-                <td>
-                  <img
-                    alt="{{ $idx + 1 }}"
-                    height="60"
-                    loading="lazy"
-                    referrerpolicy="no-referrer"
-                    src="https://i.ytimg.com/vi/{{ $video->uid }}/hqdefault.jpg"
-                    width="80"
-                  >
-                </td>
-                <td class="t-left"><a href="{{ route('video', ['channel' => $channel->uid, 'video' => $video->uid]) }}">{{ $video->name }}</a></td>
-                <td>{{ number_format($video->views) }}</td>
-                <td>{{ number_format($video->comments) }}</td>
-                <td>{{ number_format($video->likes) }}</td>
-                <td>{{ number_format($video->dislikes) }}</td>
-                <td title="{{ $video->published_at->setTimezone('Asia/Taipei') }}">{{ $video->published_at->diffForHumans() }}</td>
-                <td>{{ $video->updated_at->setTimezone('Asia/Taipei') }}</td>
-              </tr>
-            @endforeach
-          </tbody>
-        </table>
-      </div>
+          @foreach (range(1, 3) as $time)
+            @php($temp = $videos->where('hidden', false)->where('published_at', '>=', now()->subMonths($time)))
+
+            @continue($temp->isEmpty())
+
+            <tr>
+              <td class="t-center">近 {{ $time }} 個月平均（{{ sprintf('%02d', $temp->count()) }} 部）</td>
+              <td class="t-right">{{ number_format($temp->avg('views')) }}</td>
+              <td class="t-right">{{ number_format($temp->avg('comments')) }}</td>
+              <td class="t-right">{{ number_format($temp->avg('likes')) }}</td>
+              <td class="t-right">{{ number_format($temp->avg('dislikes')) }}</td>
+            </tr>
+          @endforeach
+        </tbody>
+      </table>
+    </div>
+
+    <h2 class="mt-1">影片列表</h2>
+
+    <div class="x-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th class="t-left">影片名稱</th>
+            <th>觀看次數</th>
+            <th>留言則數</th>
+            <th>喜歡數</th>
+            <th>不喜歡數</th>
+            <th>發佈於</th>
+            <th>更新於</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          @foreach($videos as $idx => $video)
+            <tr>
+              <td>
+                @component('components.image')
+                  @slot('alt', $idx + 1)
+                  @slot('height', 60)
+                  @slot('src', route('ytimg', ['payload' => bin2hex(app('aes')->encrypt($video->uid))]))
+                  @slot('width', 80)
+                @endcomponent
+              </td>
+              <td style="max-width: 20rem;">
+                <a href="{{ route('video', ['channel' => $channel->uid, 'video' => $video->uid]) }}">{{ $video->name }}</a>
+              </td>
+              <td class="t-right">{{ number_format($video->views) }}</td>
+              <td class="t-right">{{ number_format($video->comments) }}</td>
+              <td class="t-right">{{ number_format($video->likes) }}</td>
+              <td class="t-right">{{ number_format($video->dislikes) }}</td>
+              <td class="t-right" title="{{ $video->published_at->setTimezone('Asia/Taipei') }}">{{ $video->published_at->diffForHumans() }}</td>
+              <td class="t-right" title="{{ $video->updated_at->setTimezone('Asia/Taipei') }}">{{ $video->updated_at->diffForHumans() }}</td>
+            </tr>
+          @endforeach
+        </tbody>
+      </table>
     </div>
 
     <script>
@@ -213,30 +171,6 @@
             yAxes: [{ ticks: { callback: formatNum } }],
           },
         },
-      });
-
-      $('#overview').DataTable({
-        info: false,
-        ordering: false,
-        paging: false,
-        searching: false,
-      });
-
-      $('#videos').DataTable({
-        columns: [
-          { orderable: false },
-          { orderable: false },
-          null,
-          null,
-          null,
-          null,
-          { orderable: false },
-          { orderable: false },
-        ],
-        fixedHeader: true,
-        info: false,
-        order: [],
-        paging: false,
       });
     </script>
   </body>

@@ -1,58 +1,35 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="zh-Hant">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ $video->name }} | YouTuber</title>
-    <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.css" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@0.7.4/dist/chartjs-plugin-zoom.min.js"></script>
-    <style>
-      html, body {
-        background-color: #fff;
-        color: #636b6f;
-        font-family: 'Nunito', sans-serif;
-        height: 100%;
-        margin: 0;
-      }
-
-      a {
-        text-decoration: none;
-      }
-
-      .graph {
-        height: 500px;
-      }
-    </style>
+    <link href="{{ asset('/css/app.css')  }}" rel="stylesheet">
+    <link href="{{ asset('/css/chart.min.css')  }}" rel="stylesheet">
+    <script src="{{ asset('/js/chart.min.js') }}"></script>
+    <script src="{{ asset('/js/hammer.min.js') }}"></script>
+    <script src="{{ asset('/js/chartjs-plugin-zoom.min.js') }}"></script>
   </head>
   <body>
-    <div style="padding: 1rem;">
-      <h1 style="margin-bottom: 0;">{{ $video->name }}</h1>
+    <div>
+      <h1>{{ $video->name }}</h1>
 
       <a href="{{ route('channel', ['channel' => $channel->uid]) }}">{{ $channel->name }}</a>
-      <span style="margin: 0 4px;">•</span>
+      @include('components.dot')
       <span>發佈於：{{ $video->published_at->setTimezone('Asia/Taipei') }}（{{ $video->published_at->diffForHumans() }}）</span>
-      <span style="margin-right: 4px;">•</span>
+      @include('components.dot')
       <span>觀看數：{{ number_format($video->views) }}</span>
-      <span style="margin: 0 4px;">•</span>
-      <a
-        href="https://www.youtube.com/watch?v={{ $video->uid }}"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <span>YouTube</span>
+      @include('components.dot')
+      @component('components.external-link')
+        @slot('href', sprintf('https://www.youtube.com/watch?v=%s', $video->uid))
 
-        <svg style="fill: currentColor; width: 14px; height: 14px;" viewBox="0 0 24 24">
-          <path d="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z" />
-        </svg>
-      </a>
+        YouTube
+      @endcomponent
 
       <hr>
 
       @foreach (['views', 'comments', 'likes'] as $type)
-        <div class="graph">
+        <div class="graph mt-1 mb-1">
           <canvas id="{{ $type }}"></canvas>
         </div>
       @endforeach
@@ -120,8 +97,9 @@
             time: {
               displayFormats: {
                 minute: 'MM/DD HH:mm',
+                hour: 'MM/DD HH:00'
               },
-              unit: 'minute',
+              unit: {!! $statistics->count() > 5000 ? "'hour'" : "'minute'" !!},
             },
             ticks: {
               autoSkip: true,
