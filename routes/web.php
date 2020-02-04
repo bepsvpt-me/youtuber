@@ -12,6 +12,11 @@ Route::name('home')->get('/', function () {
     ]);
 });
 
+Route::prefix('safe-browse')->group(function () {
+    Route::name('ytimg')->get('ytimg-{payload}')->uses( 'SafeBrowseController@ytimg');
+    Route::name('ggpht')->get('ggpht-{payload}')->uses('SafeBrowseController@ggpht');
+});
+
 Route::name('channel')->get('{channel}', function (string $cid) {
     $channel = Channel::query()->where('uid', '=', $cid)->firstOrFail();
 
