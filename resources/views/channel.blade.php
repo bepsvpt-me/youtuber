@@ -93,7 +93,7 @@
 
     <h2 class="mt-1">影片列表</h2>
 
-    <div class="x-scroll">
+    <div class="x-scroll mb-1">
       <table>
         <thead>
           <tr>
