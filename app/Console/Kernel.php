@@ -5,6 +5,7 @@ namespace App\Console;
 use App\Channel;
 use App\Video;
 use Illuminate\Console\Scheduling\Schedule;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Illuminate\Support\Arr;
 
@@ -16,21 +17,17 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        Commands\YouTube\Channel\Add::class,
-        Commands\YouTube\Channel\Statistics::class,
-        Commands\YouTube\Playlist\Import::class,
-        Commands\YouTube\Video\Priority::class,
-        Commands\YouTube\Video\Statistics::class,
-        Commands\YouTube\Video\Trending::class,
+        //
     ];
 
     /**
      * Define the application's command schedule.
      *
-     * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
+     * @param Schedule $schedule
+     *
      * @return void
      */
-    protected function schedule(Schedule $schedule)
+    protected function schedule(Schedule $schedule): void
     {
         $chunks = $this->videos();
 
@@ -41,9 +38,13 @@ class Kernel extends ConsoleKernel
         }
 
         foreach ($this->playlists() as $playlist) {
-            foreach (json_decode($playlist->crontab, true) as $cron) {
-                $schedule->command('youtube:playlist:import', ['--id' => $playlist->playlist])->{array_shift($cron)}(...$cron);
+            if (!is_null($playlist->crontab)) {
+                foreach (json_decode($playlist->crontab, true) as $cron) {
+                    $schedule->command('youtube:playlist:import', ['--id' => $playlist->playlist])->{array_shift($cron)}(...$cron);
+                }
             }
+
+            $schedule->command('youtube:playlist:import', ['--id' => $playlist->playlist])->daily();
         }
 
         $schedule->command('youtube:video:trending')->everyFifteenMinutes();
@@ -51,6 +52,8 @@ class Kernel extends ConsoleKernel
         $schedule->command('youtube:channel:statistics', $this->channels())->hourly();
 
         $schedule->command('youtube:video:priority')->daily();
+
+        $schedule->command('youtube:video:cleanup')->weekly();
     }
 
     /**
@@ -71,13 +74,11 @@ class Kernel extends ConsoleKernel
     /**
      * Get playlist crontab.
      *
-     * @return \Illuminate\Database\Eloquent\Collection
+     * @return Collection
      */
-    protected function playlists()
+    protected function playlists(): Collection
     {
-        return Channel::query()
-            ->whereNotNull('crontab')
-            ->get(['playlist', 'crontab']);
+        return Channel::query()->get(['playlist', 'crontab']);
     }
 
     /**
@@ -122,10 +123,8 @@ class Kernel extends ConsoleKernel
      *
      * @return void
      */
-    protected function commands()
+    protected function commands(): void
     {
-        $this->load(__DIR__.'/Commands');
-
-        require base_path('routes/console.php');
+        $this->load(__DIR__ . '/Commands');
     }
 }
