@@ -17,3 +17,7 @@ mix.js('resources/js/channel.js', 'public/js')
   .js('resources/js/video.js', 'public/js')
   .sass('resources/sass/app.scss', 'public/css')
   .sourceMaps();
+
+if (mix.inProduction()) {
+  mix.version();
+}
