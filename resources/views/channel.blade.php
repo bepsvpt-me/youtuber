@@ -41,7 +41,7 @@
     <h2>影片觀看數走勢</h2>
 
     <div class="mt-1" style="height: 300px;">
-      <canvas></canvas>
+      @include('components.canvas')
     </div>
 
     <h2 class="mt-1">數據統計</h2>

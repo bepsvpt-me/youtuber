@@ -27,7 +27,7 @@
 
       @foreach (['views', 'comments', 'likes'] as $type)
         <div class="graph mt-1 mb-1">
-          <canvas id="{{ $type }}"></canvas>
+          @include('components.canvas', ['id' => $type])
         </div>
       @endforeach
     </div>
