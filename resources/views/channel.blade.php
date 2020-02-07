@@ -119,7 +119,7 @@
                   @slot('width', 80)
                 @endcomponent
               </td>
-              <td style="max-width: 20rem;">
+              <td class="video-name">
                 <a href="{{ route('video', ['channel' => $channel->uid, 'video' => $video->uid]) }}">{{ $video->name }}</a>
               </td>
               <td class="t-right">{{ number_format($video->views) }}</td>

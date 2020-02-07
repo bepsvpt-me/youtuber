@@ -46,6 +46,7 @@ table {
   width: 100%;
   border-collapse: collapse;
   border: 1px solid black;
+  white-space: nowrap;
 }
 
 th, td {
@@ -83,6 +84,12 @@ th {
 
 .mb-1 {
     margin-bottom: 1rem;
+}
+
+.video-name {
+  max-width: 20rem;
+  min-width: 10rem;
+  white-space: pre-line;
 }
 
 .graph {
