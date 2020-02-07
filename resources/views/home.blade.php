@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>YouTuber</title>
-    <link href="{{ asset('/css/app.css')  }}" rel="stylesheet">
+    <link href="{{ mix('/css/app.css')  }}" rel="stylesheet">
   </head>
   <body>
     <h1>YouTuber</h1>

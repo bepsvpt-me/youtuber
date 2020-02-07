@@ -4,9 +4,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ $channel->name }} | YouTuber</title>
-    <link href="{{ asset('/css/app.css')  }}" rel="stylesheet">
+    <link href="{{ mix('/css/app.css')  }}" rel="stylesheet">
     <link href="{{ asset('/css/chart.min.css')  }}" rel="stylesheet">
-    <script src="{{ asset('/js/chart.min.js') }}"></script>
   </head>
   <body>
     <h1 style="display: flex; align-items: center;">
@@ -134,44 +133,14 @@
       </table>
     </div>
 
+    @php($temp = $videos->where('hidden', false)->take(54)->reverse())
+
     <script>
-      @php($temp = $videos->where('hidden', false)->take(54)->reverse())
-
-      const formatNum = (val) => val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-
-      new Chart(document.querySelector('canvas').getContext('2d'), {
-        type: 'line',
-        data: {
-          labels: @json($temp->pluck('name')),
-          datasets: [{
-            label: '觀看數',
-            data: @json($temp->pluck('views')),
-            backgroundColor: 'rgba(54, 162, 235, .2)',
-            borderColor: 'rgb(54, 162, 235)',
-            borderWidth: 2,
-            fill: false,
-          }],
-        },
-        options: {
-          legend: {
-            display: false,
-          },
-          maintainAspectRatio: false,
-          tooltips: {
-            mode: 'index',
-            intersect: false,
-            callbacks: {
-              label: (tooltipItem, data) => `${data.datasets[tooltipItem.datasetIndex].label}: ${formatNum(tooltipItem.yLabel)}`,
-            }
-          },
-          scales:{
-            xAxes: [{
-              display: false,
-            }],
-            yAxes: [{ ticks: { callback: formatNum } }],
-          },
-        },
-      });
+      var labels = @json($temp->pluck('name'));
+      var data = @json($temp->pluck('views'));
     </script>
+
+    <script src="{{ asset('/js/chart.min.js') }}" defer></script>
+    <script src="{{ mix('/js/channel.js') }}" defer></script>
   </body>
 </html>
