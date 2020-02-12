@@ -7,7 +7,11 @@
     <link href="{{ mix('/css/app.css')  }}" rel="stylesheet">
   </head>
   <body>
-    <h1>YouTuber</h1>
+    <section style="display: flex; align-items: center; justify-content: space-between;">
+      <h1>YouTuber</h1>
+
+      <a href="{{ route('trending') }}">發燒影片</a>
+    </section>
 
     <section class="x-scroll mt-1 mb-1">
       <table>

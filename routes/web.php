@@ -2,6 +2,7 @@
 
 use App\Channel;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
 Carbon::setLocale('zh_TW');
@@ -15,6 +16,39 @@ Route::name('home')->get('/', function () {
 Route::prefix('safe-browse')->group(function () {
     Route::name('ytimg')->get('ytimg-{payload}')->uses( 'SafeBrowseController@ytimg');
     Route::name('ggpht')->get('ggpht-{payload}')->uses('SafeBrowseController@ggpht');
+});
+
+Route::name('trending')->get('trending', function () {
+    $videos = DB::table('trendings')
+        ->orderByDesc('fetched_at')
+        ->orderBy('ranking')
+        ->take(50)
+        ->get();
+
+    return view('trending', ['videos' => $videos]);
+});
+
+Route::name('trending.time')->get('trending/{time}', function (string $time) {
+    try {
+        $carbon = Carbon::parse($time)->setSecond(0);
+
+        $carbon->subMinutes($carbon->minute % 15);
+    } catch (Exception $e) {
+        abort(404);
+    }
+
+    $lower = $carbon->subMinutes(1)->format('Y-m-d H:i:s');
+
+    $upper = $carbon->addMinutes(6)->format('Y-m-d H:i:s');
+
+    $videos = DB::table('trendings')
+        ->whereBetween('fetched_at', [$lower, $upper])
+        ->orderByDesc('fetched_at')
+        ->orderBy('ranking')
+        ->take(50)
+        ->get();
+
+    return view('trending', ['videos' => $videos]);
 });
 
 Route::name('channel')->get('{channel}', function (string $cid) {
