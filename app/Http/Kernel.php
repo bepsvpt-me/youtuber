@@ -3,6 +3,7 @@
 namespace App\Http;
 
 use App\Http\Middleware\TrustProxies;
+use Bepsvpt\SecureHeaders\SecureHeadersMiddleware;
 use Illuminate\Auth\Middleware\AuthenticateWithBasicAuth;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 use Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode;
@@ -23,6 +24,7 @@ class Kernel extends HttpKernel
     protected $middleware = [
         TrustProxies::class,
         CheckForMaintenanceMode::class,
+        SecureHeadersMiddleware::class,
     ];
 
     /**
