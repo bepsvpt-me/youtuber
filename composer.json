@@ -12,6 +12,7 @@
     "ext-fileinfo": "*",
     "ext-gd": "*",
     "ext-json": "*",
+    "bepsvpt/secure-headers": "~5.5",
     "fideloper/proxy": "~4.0",
     "google/apiclient": "~2.4",
     "htmlmin/htmlmin": "~6.0",
