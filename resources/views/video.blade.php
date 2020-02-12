@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ $video->name }} | YouTuber</title>
     <link href="{{ mix('/css/app.css')  }}" rel="stylesheet">
-    <link href="{{ asset('/css/chart.min.css')  }}" rel="stylesheet">
+    <link href="{{ asset('/css/chart.min.css?v=2.9.3')  }}" rel="stylesheet">
   </head>
   <body>
     <div>
@@ -36,7 +36,7 @@
       @php($statistics = $statistics->unique('views'))
     @endif
 
-    <script>
+    <script nonce="{{ Bepsvpt\SecureHeaders\SecureHeaders::nonce() }}">
       var unit = {!! $statistics->count() > 5000 ? "'hour'" : "'minute'" !!};
       var views = @json($statistics->pluck('views'));
       var comments = @json($statistics->pluck('comments'));
@@ -45,9 +45,9 @@
       var labels = @json($statistics->pluck('fetched_at')->map->setTimezone('Asia/Taipei')->map->toDateTimeString());
     </script>
 
-    <script src="{{ asset('/js/chart.min.js') }}" defer></script>
-    <script src="{{ asset('/js/hammer.min.js') }}" defer></script>
-    <script src="{{ asset('/js/chartjs-plugin-zoom.min.js') }}" defer></script>
+    <script src="{{ asset('/js/chart.min.js?v=2.9.3') }}" defer></script>
+    <script src="{{ asset('/js/hammer.min.js?v=2.0.8') }}" defer></script>
+    <script src="{{ asset('/js/chartjs-plugin-zoom.min.js?v=0.7.5') }}" defer></script>
     <script src="{{ mix('/js/video.js') }}" defer></script>
   </body>
 </html>

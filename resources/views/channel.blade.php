@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ $channel->name }} | YouTuber</title>
     <link href="{{ mix('/css/app.css')  }}" rel="stylesheet">
-    <link href="{{ asset('/css/chart.min.css')  }}" rel="stylesheet">
+    <link href="{{ asset('/css/chart.min.css?v=2.9.3')  }}" rel="stylesheet">
   </head>
   <body>
     <h1 style="display: flex; align-items: center;">
@@ -135,12 +135,12 @@
 
     @php($temp = $videos->where('hidden', false)->take(54)->reverse())
 
-    <script>
+    <script nonce="{{ Bepsvpt\SecureHeaders\SecureHeaders::nonce() }}">
       var labels = @json($temp->pluck('name'));
       var data = @json($temp->pluck('views'));
     </script>
 
-    <script src="{{ asset('/js/chart.min.js') }}" defer></script>
+    <script src="{{ asset('/js/chart.min.js?v=2.9.3') }}" defer></script>
     <script src="{{ mix('/js/channel.js') }}" defer></script>
   </body>
 </html>
