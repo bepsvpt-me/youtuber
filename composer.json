@@ -1,12 +1,18 @@
 {
   "name": "bepsvpt/youtuber",
-  "type": "project",
   "description": "YouTuber statistics.",
   "keywords": [
     "laravel",
     "youtuber"
   ],
   "license": "AGPL-3.0-only",
+  "type": "project",
+  "authors": [
+    {
+      "name": "bepsvpt",
+      "email": "og7lsrszah6y3lz@infinitefa.email"
+    }
+  ],
   "require": {
     "php": "^7.2",
     "ext-fileinfo": "*",
