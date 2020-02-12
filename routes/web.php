@@ -32,6 +32,8 @@ Route::name('trending.time')->get('trending/{time}', function (string $time) {
     try {
         $carbon = Carbon::parse($time)->setSecond(0);
 
+        abort_if($carbon->isFuture(), 404);
+
         $carbon->subMinutes($carbon->minute % 15);
     } catch (Exception $e) {
         abort(404);
