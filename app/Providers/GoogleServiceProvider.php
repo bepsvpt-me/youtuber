@@ -17,7 +17,7 @@ class GoogleServiceProvider extends ServiceProvider
     {
         $this->app->singleton('google', function () {
             return new Google_Client([
-                'developer_key' => env('GOOGLE_DEVELOPER_KEY'),
+                'developer_key' => config('services.google.key'),
             ]);
         });
 
