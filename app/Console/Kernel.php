@@ -109,8 +109,7 @@ class Kernel extends ConsoleKernel
     {
         $intervals = [
             'everyMinute',
-            'everyFiveMinutes',
-            'everyFifteenMinutes',
+            'everyTenMinutes',
             array_fill(0, 10, 'everyThirtyMinutes'),
             array_fill(0, 30, 'hourly'),
         ];
