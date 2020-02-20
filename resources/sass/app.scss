@@ -1,89 +1,23 @@
-@font-face {
-  font-display: swap;
-  font-family: 'Nunito';
-  font-style: normal;
-  font-weight: 400;
-  src: local('Nunito Regular'), local('Nunito-Regular'),
-  url('../fonts/nunito-v12-latin-regular.woff2') format('woff2'),
-  url('../fonts/nunito-v12-latin-regular.woff') format('woff');
-}
-
-@font-face {
-  font-display: swap;
-  font-family: 'Nunito';
-  font-style: normal;
-  font-weight: 700;
-  src: local('Nunito Bold'), local('Nunito-Bold'),
-  url('../fonts/nunito-v12-latin-700.woff2') format('woff2'),
-  url('../fonts/nunito-v12-latin-700.woff') format('woff');
-}
-
 html, body {
-  background-color: #fff;
-  color: #636b6f;
-  font-family: 'Nunito', sans-serif;
-  margin: 0;
-}
-
-html {
   height: 100%;
-}
-
-body {
-  height: calc(100% - 2rem);
-  padding: 1rem 1.5rem;
 }
 
 h1, h2 {
   margin: 0;
 }
 
-a {
-  text-decoration: none;
-}
-
 table {
-  width: 100%;
-  border-collapse: collapse;
-  border: 1px solid black;
-  white-space: nowrap;
-
-  th, td {
-    padding: 0.7rem 1rem;
-    border: 1px solid #ddd;
-  }
-
-  th {
-    background-color: #eee;
+  td {
+    vertical-align: middle !important;
   }
 }
 
-.t-left {
-  text-align: left;
+svg {
+  fill: currentColor;
 }
 
-.t-center {
-  text-align: center;
-}
-
-.t-right {
-  text-align: right;
-}
-
-.v-center {
-  vertical-align: middle;
-}
-
-.x-scroll {
-  overflow-x: auto;
-}
-
-.mt-1 {
-  margin-top: 1rem;
-}
-
-.mb-1 {
-  margin-bottom: 1rem;
+.no-select {
+  user-select: none;
 }
 
 .video-name {
@@ -94,9 +28,4 @@ table {
 
 .graph {
   height: 500px;
-}
-
-.dot {
-  margin: 0 0.1rem;
-  user-select: none;
 }

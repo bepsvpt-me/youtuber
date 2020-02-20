@@ -3,7 +3,7 @@
 
   <img
     alt="{{ $alt }}"
-    class="v-center"
+    class="align-middle"
     decoding="async"
     height="{{ $height ?? 35 }}"
     importance="low"
