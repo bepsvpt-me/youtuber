@@ -461,7 +461,7 @@ return [
 
         'block-all-mixed-content' => true,
 
-        'upgrade-insecure-requests' => true,
+        'upgrade-insecure-requests' => false,
 
         /*
          * Please references script-src directive for available values, only `script-src` and `style-src`
@@ -489,12 +489,6 @@ return [
 
         'style-src' => [
             'self' => true,
-
-            'unsafe-inline' => true,
-
-            'report-sample' => false,
-
-            'add-generated-nonce' => false,
         ],
 
         'img-src' => [
