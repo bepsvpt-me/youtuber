@@ -3,17 +3,19 @@
 @section('title', sprintf('%s | YouTuber', $channel->name))
 
 @section('header')
-  <h1 class="d-flex align-items-center">
+  <section class="d-flex align-items-center">
     @if ($channel->thumbnail)
       @component('components.image')
         @slot('alt', $channel->name)
+        @slot('class', 'mr-2')
+        @slot('height', 40)
         @slot('src', route('ggpht', ['payload' => bin2hex(app('aes')->encrypt($channel->thumbnail))]))
-        @slot('style', 'margin-right: 6px;')
+        @slot('width', 40)
       @endcomponent
     @endif
 
-    <span>{{ $channel->name }}</span>
-  </h1>
+      <h1>{{ $channel->name }}</h1>
+  </section>
 @endsection
 
 @section('main')

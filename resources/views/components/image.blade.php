@@ -3,14 +3,13 @@
 
   <img
     alt="{{ $alt }}"
-    class="align-middle"
+    class="align-middle {{ $class ?? null }}"
     decoding="async"
     height="{{ $height ?? 35 }}"
     importance="low"
     loading="lazy"
     referrerpolicy="no-referrer"
     src="{{ sprintf('%s?type=jpg', $src) }}"
-    style="{{ $style ?? null }}"
     width="{{ $width ?? 35 }}"
   >
 
