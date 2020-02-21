@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Track YouTuber channel and video statistics.">
     <title>@yield('title', 'YouTuber')</title>
-    <link rel="stylesheet" href="{{ asset('/css/bootstrap.min.css?v=4.4.1') }}">
     @yield('style')
     <link rel="stylesheet" href="{{ mix('/css/app.css')  }}">
   </head>
