@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Carbon\Carbon;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use phpseclib\Crypt\AES;
@@ -14,6 +15,13 @@ class AppServiceProvider extends ServiceProvider
      * @return void
      */
     public function register(): void
+    {
+        Carbon::setLocale('zh_TW');
+
+        $this->aes();
+    }
+
+    protected function aes()
     {
         $this->app->singleton('aes', function ($app) {
             $key = $app->config->get('app.key');
