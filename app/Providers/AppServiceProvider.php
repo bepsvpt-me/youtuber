@@ -16,8 +16,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        Carbon::setLocale('zh_TW');
-
         $this->aes();
     }
 
@@ -45,6 +43,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Carbon::setLocale('zh_TW');
     }
 }
