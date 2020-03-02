@@ -71,6 +71,14 @@
     ],
     "post-create-project-cmd": [
       "@php artisan key:generate --ansi"
+    ],
+    "upgrade": [
+      "@php artisan down",
+      "@php artisan optimize:clear",
+      "git pull --rebase --autostash",
+      "@composer install --no-dev -o",
+      "@php artisan optimize",
+      "@php artisan up"
     ]
   }
 }
