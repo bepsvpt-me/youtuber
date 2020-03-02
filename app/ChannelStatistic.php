@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ChannelStatistic extends Model
+final class ChannelStatistic extends Model
 {
     /**
      * Indicates if the model should be timestamped.

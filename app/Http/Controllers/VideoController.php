@@ -8,7 +8,7 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\View\View;
 
-class VideoController extends Controller
+final class VideoController extends Controller
 {
     /**
      * Video statistic page.

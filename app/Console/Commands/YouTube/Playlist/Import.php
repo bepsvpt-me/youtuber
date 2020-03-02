@@ -8,7 +8,7 @@ use App\Video;
 use Carbon\Carbon;
 use Google_Service_YouTube_PlaylistItem;
 
-class Import extends YouTube
+final class Import extends YouTube
 {
     /**
      * The name and signature of the console command.

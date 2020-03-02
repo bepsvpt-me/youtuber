@@ -5,7 +5,7 @@ namespace App\Console\Commands\YouTube\Video;
 use App\Video;
 use Illuminate\Console\Command;
 
-class Priority extends Command
+final class Priority extends Command
 {
     /**
      * The name and signature of the console command.

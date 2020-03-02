@@ -5,7 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Channel extends Model
+final class Channel extends Model
 {
     /**
      * Indicates if the model should be timestamped.

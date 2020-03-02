@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class VideoStatistic extends Model
+final class VideoStatistic extends Model
 {
     /**
      * Indicates if the model should be timestamped.

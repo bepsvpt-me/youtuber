@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 /**
  * @property string $name
  */
-class Video extends Model
+final class Video extends Model
 {
     /**
      * Indicates if the model should be timestamped.

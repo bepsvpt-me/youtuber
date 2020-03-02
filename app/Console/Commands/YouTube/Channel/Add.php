@@ -7,7 +7,7 @@ use App\Console\Commands\YouTube\YouTube;
 use Carbon\Carbon;
 use Google_Service_YouTube_Channel;
 
-class Add extends YouTube
+final class Add extends YouTube
 {
     /**
      * The name and signature of the console command.

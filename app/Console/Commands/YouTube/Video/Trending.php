@@ -6,7 +6,7 @@ use App\Console\Commands\YouTube\YouTube;
 use Google_Service_YouTube_Video;
 use Illuminate\Support\Facades\DB;
 
-class Trending extends YouTube
+final class Trending extends YouTube
 {
     /**
      * The name and signature of the console command.

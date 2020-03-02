@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Channel;
 use Illuminate\View\View;
 
-class ChannelController extends Controller
+final class ChannelController extends Controller
 {
     /**
      * Channel statistic page.

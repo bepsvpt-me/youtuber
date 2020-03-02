@@ -7,7 +7,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use stdClass;
 
-class Cleanup extends YouTube
+final class Cleanup extends YouTube
 {
     /**
      * The name and signature of the console command.

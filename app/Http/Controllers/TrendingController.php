@@ -7,7 +7,7 @@ use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
-class TrendingController extends Controller
+final class TrendingController extends Controller
 {
     /**
      * Trending page.

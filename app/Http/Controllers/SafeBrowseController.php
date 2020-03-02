@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
-class SafeBrowseController extends Controller
+final class SafeBrowseController extends Controller
 {
     /**
      * YouTube image.

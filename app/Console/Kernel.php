@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Illuminate\Support\Arr;
 
-class Kernel extends ConsoleKernel
+final class Kernel extends ConsoleKernel
 {
     /**
      * The Artisan commands provided by your application.

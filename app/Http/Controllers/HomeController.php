@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Channel;
 use Illuminate\View\View;
 
-class HomeController extends Controller
+final class HomeController extends Controller
 {
     /**
      * Home page.

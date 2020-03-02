@@ -6,7 +6,7 @@ use Google_Client;
 use Google_Service_YouTube;
 use Illuminate\Support\ServiceProvider;
 
-class GoogleServiceProvider extends ServiceProvider
+final class GoogleServiceProvider extends ServiceProvider
 {
     /**
      * Register any application services.

@@ -6,7 +6,7 @@ use App\Channel;
 use App\Console\Commands\YouTube\YouTube;
 use Google_Service_YouTube_Channel;
 
-class Statistics extends YouTube
+final class Statistics extends YouTube
 {
     /**
      * The name and signature of the console command.
