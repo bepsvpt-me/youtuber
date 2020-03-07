@@ -140,7 +140,7 @@
 @section('script')
   @php($temp = $videos->where('hidden', false)->take(54)->reverse())
 
-  <script nonce="{{ Bepsvpt\SecureHeaders\SecureHeaders::nonce() }}">
+  <script nonce="{{ Bepsvpt\SecureHeaders\SecureHeaders::nonce('script') }}">
     var labels = @json($temp->pluck('name'));
     var data = @json($temp->pluck('views'));
   </script>
