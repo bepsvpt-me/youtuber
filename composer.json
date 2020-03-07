@@ -20,19 +20,18 @@
     "ext-fileinfo": "*",
     "ext-gd": "*",
     "ext-json": "*",
-    "bepsvpt/secure-headers": "~5.5",
+    "bepsvpt/secure-headers": "~6.0",
     "fideloper/proxy": "~4.0",
     "google/apiclient": "~2.4",
-    "htmlmin/htmlmin": "~6.0",
-    "laravel/framework": "~6.0",
+    "laravel/framework": "~7.0",
     "laravel/tinker": "~2.0",
     "phpseclib/phpseclib": "~2.0"
   },
   "require-dev": {
-    "facade/ignition": "~1.4",
+    "facade/ignition": "~2.0",
     "fzaninotto/faker": "~1.4",
     "mockery/mockery": "~1.0",
-    "nunomaduro/collision": "~3.0",
+    "nunomaduro/collision": "~4.0",
     "phpunit/phpunit": "~9.0"
   },
   "config": {
@@ -72,13 +71,13 @@
     "post-create-project-cmd": [
       "@php artisan key:generate --ansi"
     ],
-    "upgrade": [
-      "@php artisan down",
-      "@php artisan optimize:clear",
+    "update-project": [
+      "@php artisan --ansi down",
+      "@php artisan --ansi optimize:clear",
       "git pull --rebase --autostash",
-      "@composer install --no-dev -o",
-      "@php artisan optimize",
-      "@php artisan up"
+      "@composer install --ansi --no-dev -o",
+      "@php artisan --ansi optimize",
+      "@php artisan --ansi up"
     ]
   }
 }
