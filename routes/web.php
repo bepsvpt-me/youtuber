@@ -12,6 +12,14 @@ Route::prefix('safe-browse')
     ->get('ggpht-{payload}')
     ->uses('SafeBrowseController@ggpht');
 
+Route::name('privacy')
+    ->get('policies/privacy')
+    ->uses('PolicyController@privacy');
+
+Route::name('tos')
+    ->get('policies/terms-of-services')
+    ->uses('PolicyController@tos');
+
 Route::name('home')
     ->get('/')
     ->uses('HomeController@index');
