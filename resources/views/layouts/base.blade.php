@@ -20,6 +20,10 @@
     </main>
 
     <footer class="text-center">
+      <a href="{{ route('tos') }}">服務條款</a>
+      <span>•</span>
+      <a href="{{ route('privacy') }}">隱私權政策</a>
+      <span>•</span>
       <a href="https://github.com/bepsvpt-me/youtuber">GitHub</a>
       <p>bepsvpt.me © {{ date('Y') }}</p>
     </footer>
